@@ -1,5 +1,7 @@
 local laptopScreen = "Color LCD"
-local otherDisplay = "U28D590"
+-- local otherDisplay = "U28D590"
+local otherDisplay = "ASUS VP28U"
+
 hs.window.animationDuration = 0
 
 positions = {
@@ -51,6 +53,7 @@ function applyMyLayout()
 		print(k,v)
 		if v == "U28D590" then
 			have_big_display = true
+			print("have big")
 		end
 	end
 	if have_big_display then
@@ -98,14 +101,14 @@ end
 
 function leftScreen()
 	local frame = hs.window.focusedWindow():screen():frame()
-	frame.x2 = frame.x2 / 2
+	frame.x2 = frame.x1 + (frame.x2 - frame.x1) / 2
 	hs.window.focusedWindow():setFrame(frame)
 	k:exit()
 end
 
 function rightScreen()
 	local frame = hs.window.focusedWindow():screen():frame()
-	frame.x1 = frame.x2 / 2
+	frame.x1 = frame.x1 + (frame.x2 - frame.x1) / 2
 	frame.w = frame.w / 2
 	hs.window.focusedWindow():setFrame(frame)
 	k:exit()
@@ -136,8 +139,8 @@ end
 
 function middleScreen()
 	local frame = hs.window.focusedWindow():screen():frame()
-	frame.x1 = frame.x2 / 4
-	frame.x2 = frame.x2 * 0.66
+	frame.x1 = frame.x1 + frame.w / 4
+	frame.x2 = frame.x1 + frame.w * 0.5
 	hs.window.focusedWindow():setFrame(frame)
 	k:exit()
 end
@@ -145,12 +148,10 @@ end
 k:bind({}, 'h', nil, hideAllApps)
 k:bind({}, 'w', nil, hideOthersAndResize)
 k:bind({}, 't', nil, fullScreen)
-k:bind({}, 'n', nil, leftScreen)
-k:bind({}, 's', nil, rightScreen)
+k:bind({}, 'c', nil, leftScreen)
+k:bind({}, 'r', nil, rightScreen)
 k:bind({}, 'm', nil, middleScreen)
 k:bind({}, 'g', nil, throwLeft)
-k:bind({}, 'c', nil, throwDown)
-k:bind({}, 'r', nil, throwUp)
 k:bind({}, 'l', nil, throwRight)
 
 function reloadConfig(files)
