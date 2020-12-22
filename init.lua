@@ -45,10 +45,17 @@ local windowLayoutBigDisplay = {
 	{"Slack",  nil,     otherDisplay, positions.middle_wide, nil, nil},	
 }
 
+
+-- Get list of screens and refresh that list whenever screens are (un)plugged
+local screens = hs.screen.allScreens()
+local screenwatcher = hs.screen.watcher.new(function()
+    screens = hs.screen.allScreens()
+end)
+screenwatcher:start()
+
 function applyMyLayout()
 
 	have_big_display = false
-	screens = hs.screen.allScreens()
 	for k,v in pairs(screens) do 
 		print(k,v)
 		if v == "U28D590" then
@@ -153,6 +160,8 @@ k:bind({}, 'r', nil, rightScreen)
 k:bind({}, 'm', nil, middleScreen)
 k:bind({}, 'g', nil, throwLeft)
 k:bind({}, 'l', nil, throwRight)
+-- k.bind({"cmd"}, "v", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
+k:bind({}, 'v', nil, function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) k:exit() end)
 
 function reloadConfig(files)
     doReload = false
